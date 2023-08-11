@@ -1,0 +1,1 @@
+podman run -d --name redis_prueba  -p 6379:6379 redis
