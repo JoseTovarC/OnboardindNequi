@@ -30,7 +30,7 @@ public class MyReactiveRepositoryAdapter implements PostgreSQLGateway
     }
 
     @Override
-    public Flux<Person> getPersonas() {
+    public Flux<Person> getPeople() {
         return myLocalRepository.findAll()
                 .map(MyReactiveRepositoryAdapter::PersonInfoToPerson);
     }

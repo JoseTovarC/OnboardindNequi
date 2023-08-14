@@ -1,5 +1,6 @@
 package co.com.bancolombia.usecase.person;
 
+import co.com.bancolombia.model.exception.DataNotFoundException;
 import co.com.bancolombia.model.person.User;
 import co.com.bancolombia.model.person.gateways.RedisGateway;
 import co.com.bancolombia.model.person.gateways.RestConsumerExternalAPI;
@@ -31,9 +32,9 @@ public class PersonUseCase {
         return repositoryPostgresGateway.getPersonById(id);
     }
 
-    public Flux<Person> getPersonas() {
+    public Flux<Person> getPeople() {
 
-        return repositoryPostgresGateway.getPersonas();
+        return repositoryPostgresGateway.getPeople();
     }
 
 
@@ -46,6 +47,7 @@ public class PersonUseCase {
                                                 redisCacheGateway.saveUser(usuario).onErrorReturn(usuario))
 
                         ));
+                //.switchIfEmpty(Mono.error(new DataNotFoundException("Holi")));
     }
 
     public Flux<User> getUsers() {
@@ -55,15 +57,23 @@ public class PersonUseCase {
 
     public Flux<User> getUsersByName(String nombre) {
 
-        return repositoryPostgresGateway.getUsersByName(nombre);
+        return repositoryPostgresGateway.getUsersByName(nombre)
+                .switchIfEmpty( Flux.defer( () ->
+                        this.getUsers()
+                ));
     }
 
     public Mono<User> createUser(Integer id)
     {
-        return externalAPI.getUserById(id)
-                .flatMap(repositoryPostgresGateway::saveUser)
-                .flatMap(usuario ->
-                        redisCacheGateway.saveUser(usuario).onErrorReturn(usuario));
+
+            return externalAPI.getUserById(id)
+
+                    .flatMap(repositoryPostgresGateway::saveUser)
+                    .flatMap(usuario ->
+                            redisCacheGateway.saveUser(usuario).onErrorReturn(usuario))
+                    .onErrorResume(error -> Mono.empty())
+                    ;
+
     }
 
 

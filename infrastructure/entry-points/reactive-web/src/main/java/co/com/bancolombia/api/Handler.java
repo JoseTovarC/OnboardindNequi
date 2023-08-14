@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import co.com.bancolombia.usecase.person.PersonUseCase;
 import co.com.bancolombia.model.person.Person;
@@ -23,9 +22,7 @@ public class Handler {
 
     //Sección Person
     public Mono<ServerResponse> getPerson(ServerRequest serverRequest) {
-        // usecase.logic();
-        useCaseperson.getPerson(serverRequest.pathVariable("id")).subscribe(data -> System.out.println(data.getId()));
-
+        // usecase.logic()
         return useCaseperson.getPerson(serverRequest.pathVariable("id"))
                 .map(Handler::PersonToPersonResponse)
                 .flatMap(Respuestac -> ServerResponse
@@ -47,13 +44,13 @@ public class Handler {
 
     }
 
-    public Mono<ServerResponse> getPersonas(ServerRequest serverRequest) {
+    public Mono<ServerResponse> getPeople(ServerRequest serverRequest) {
         // usecase.logic();
 
         return ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(useCaseperson.getPersonas()
+                        .body(useCaseperson.getPeople()
                                             .map(Handler::PersonToPersonResponse),
                                 PersonResponse.class
                 );
@@ -85,21 +82,15 @@ public class Handler {
     public Mono<ServerResponse> getUsersByName(ServerRequest serverRequest) {
         // usecase.logic();
 
-        String nombre = String.valueOf(serverRequest.pathVariable("nombre"));
+        String searchUserName = String.valueOf(serverRequest.pathVariable("nombre"));
         return ServerResponse
                             .ok()
                             .contentType(MediaType.APPLICATION_JSON)
                             .body(
-                                    useCaseperson
-                                            .getUsersByName(nombre)
-                                            .switchIfEmpty( Flux.defer( () ->
-                                                            useCaseperson.getUsers()
-                                                            ))
-                                            .map(Handler::UserToUserResponse)
-
-                                    ,
+                                    useCaseperson.getUsersByName(searchUserName)
+                                            .map(Handler::UserToUserResponse),
                                     UserResponse.class
-                );
+                            );
 
 
 
@@ -128,18 +119,17 @@ public class Handler {
                 .flatMap(respuestaCreado -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(respuestaCreado))
-                .switchIfEmpty(ServerResponse.notFound().build());
+                .bodyValue(respuestaCreado));
     }
 
-    private static UserResponse UserToUserResponse(User usuarito) {
+    private static UserResponse UserToUserResponse(User localUser) {
         return UserResponse
                 .builder()
-                .id(usuarito.getId())
-                .firstName(usuarito.getFirstName())
-                .lastName(usuarito.getLastName())
-                .email(usuarito.getEmail())
-                .avatar(usuarito.getAvatar())
+                .id(localUser.getId())
+                .firstName(localUser.getFirstName())
+                .lastName(localUser.getLastName())
+                .email(localUser.getEmail())
+                .avatar(localUser.getAvatar())
                 .build();
     }
 

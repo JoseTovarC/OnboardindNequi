@@ -16,7 +16,7 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(GET("/api/person/{id}"), handler::getPerson)
                 .and(route(GET("/api/personita/{id}"), handler::getPersonById))
-                .and(route(GET("/api/personitas"), handler::getPersonas))
+                .and(route(GET("/api/personitas"), handler::getPeople))
                 //Seccion Usuarios
                 .and(route(GET("/api/usuario/{id}"), handler::getUserById))
                 .and(route(GET("/api/usuarios/{nombre}"), handler::getUsersByName))

@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 public interface PostgreSQLGateway {
 
     Mono<Person> getPersonById(String id);
-    Flux<Person> getPersonas();
+    Flux<Person> getPeople();
 
     Mono<User> getUserById(String id);
     Flux<User> getUsersByName(String nombre);
