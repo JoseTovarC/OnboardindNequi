@@ -34,3 +34,7 @@ sonarqube {
 }
 
 apply from: './main.gradle'
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

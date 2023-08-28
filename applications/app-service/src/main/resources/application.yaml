@@ -35,9 +35,9 @@ database:
     database: "railway"
     schema: "public"
     username: "postgres"
-    password: "dHaqQ6EsM5L9y2J9I9gZ"
-    host: "containers-us-west-156.railway.app"
-    port: 7619
+    password: "WDiYZ4hURDF7EeS9Tf75"
+    host: "containers-us-west-164.railway.app"
+    port: 6624
 adapter:
   restconsumer:
     timeout: 5000
