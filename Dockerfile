@@ -5,7 +5,7 @@ FROM gradle:7.3.0-jdk11 AS build
 WORKDIR /app
 
 # Copiar archivos de tu proyecto al directorio de trabajo
-COPY ./app
+COPY . /app
 FROM eclipse-temurin:17-jdk AS build
 
 FROM eclipse-temurin:17-jre
