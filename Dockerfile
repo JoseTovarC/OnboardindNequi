@@ -10,7 +10,7 @@ FROM eclipse-temurin:17-jdk AS build
 
 FROM eclipse-temurin:17-jre
 # Ejecutar Gradle para construir el proyecto
-RUN gradle clean build
+RUN ./gradlew clean build
 
 ARG PORT
 ENV PORT=${PORT}
