@@ -1,5 +1,5 @@
 # Usar una imagen base con JDK 8 y Gradle
-FROM gradle:7.3.0-jdk11 AS build
+FROM gradle:8.0.2-jdk17 AS build
 
 # Establecer un directorio de trabajo
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN gradle clean build
 
 ARG PORT
 ENV PORT=${PORT}
-COPY --from=build /app/OnboardingNequi/build/libs/prueba.jar /app/OnboardingNequi/prueba.jar
+COPY --from=build /app/build/libs/prueba.jar /app/prueba.jar
 RUN useradd runtime
 USER runtime
 ENTRYPOINT [ "java", "-Dserver.port=${PORT}", "-jar", "prueba.jar" ]
