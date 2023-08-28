@@ -1,5 +1,9 @@
-FROM eclipse-temurin:17-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE
-COPY ${JAR_FILE} prueba.jar
-ENTRYPOINT ["java","-jar","/prueba.jar"]
+FROM openjdk:17-jdk-slim-buster
+WORKDIR /app
+
+COPY app/build/lib/* build/lib/
+
+COPY prueba/build/libs/prueba.jar build/
+
+WORKDIR /prueba/build
+ENTRYPOINT java -jar app.jar
