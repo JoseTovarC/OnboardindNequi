@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Ejecutar Gradle para construir el proyecto
-RUN gradle clean build
+RUN gradle build
 
 # Crear una nueva imagen basada en OpenJDK 8
 FROM openjdk:11-jre-slim-buster
