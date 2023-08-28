@@ -11,8 +11,7 @@ COPY . /app
 RUN gradle clean build
 
 # Crear una nueva imagen basada en OpenJDK 8
-FROM eclipse-temurin:11.0.12_7-jdk
-CMD ["java", "-jar", "/opt/app/prueba.jar"]
+FROM openjdk:11-jre-slim-buster
 
 # Exponer el puerto que utilizará la aplicación
 EXPOSE 8080
