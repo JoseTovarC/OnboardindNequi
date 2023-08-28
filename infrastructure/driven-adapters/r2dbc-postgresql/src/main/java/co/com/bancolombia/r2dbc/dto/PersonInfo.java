@@ -12,7 +12,8 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("person")
 public class PersonInfo {
 
-    @Id
+    //@Id
+    @Column
     Integer id;
     @Column
     String nombre;

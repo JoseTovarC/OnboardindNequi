@@ -11,7 +11,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("usuarios")
 public class UserData {
 
-    @Id
+    //@Id
     @Column("second_id")
     Integer secondId;
     @Column("id")

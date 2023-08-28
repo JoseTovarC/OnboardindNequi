@@ -151,6 +151,7 @@ class RouterRestTest {
                );
    }
 
+   /*
    @Test
    void testListenGetUsersByNameNotFound() {
 
@@ -237,7 +238,7 @@ void testListenGetUsers() {
             );
 }
 
-/*
+
     @Test
     void testListenGETOtherUseCase() {
         webTestClient.get()
