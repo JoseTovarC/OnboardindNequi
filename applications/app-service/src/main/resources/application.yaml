@@ -13,8 +13,8 @@ spring:
     include: null
   data:
     redis:
-      host: "containers-us-west-122.railway.app"
-      port: 6597
+      host: "localhost"
+      port: 6379
       database: 0
 management:
   endpoints:
@@ -32,12 +32,12 @@ cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
 database:
   postgresql:
-    database: "railway"
+    database: "postgres"
     schema: "public"
     username: "postgres"
-    password: "WDiYZ4hURDF7EeS9Tf75"
-    host: "containers-us-west-164.railway.app"
-    port: 6624
+    password: "aprendiendoNequi"
+    host: "localhost"
+    port: 5440
 adapter:
   restconsumer:
     timeout: 5000
