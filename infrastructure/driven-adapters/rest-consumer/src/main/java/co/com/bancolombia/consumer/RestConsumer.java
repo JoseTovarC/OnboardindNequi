@@ -14,37 +14,6 @@ public class RestConsumer implements RestConsumerExternalAPI {
     private final WebClient client;
 
 
-    // these methods are an example that illustrates the implementation of WebClient.
-    // You should use the methods that you implement from the Gateway from the domain.
-    //@CircuitBreaker(name = "testGet" /*, fallbackMethod = "testGetOk"*/)
-    /*public Mono<UserResponse> testGet() {
-        return client
-                .get()
-                .retrieve()
-                .bodyToMono(UserResponse.class);
-    }*/
-
-// Possible fallback method
-//    public Mono<String> testGetOk(Exception ignored) {
-//        return client
-//                .get()  //TOD0: change for another endpoint or destination
-//                .retrieve()
-//                .bodyToMono(String.class);
-//    }
-
-    /*@CircuitBreaker(name = "testPost")
-    public Mono<UserResponse> testPost() {
-        UserRequest request = UserRequest.builder()
-            .val1("exampleval1")
-            .val2("exampleval2")
-            .build();
-        return client
-                .post()
-                .body(Mono.just(request), UserRequest.class)
-                .retrieve()
-                .bodyToMono(UserResponse.class);
-    }*/
-
     @Override
     public Mono<User> getUserById(Integer id) {
         return client

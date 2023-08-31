@@ -17,30 +17,31 @@ import co.com.bancolombia.model.person.Person;
 @RequiredArgsConstructor
 public class Handler {
    
-    private  final PersonUseCase useCaseperson;
-    //private  final UseCase2 useCase2;
+    private  final PersonUseCase useCasePerson;
+
 
     //Sección Person
     public Mono<ServerResponse> getPerson(ServerRequest serverRequest) {
         // usecase.logic()
-        return useCaseperson.getPerson(serverRequest.pathVariable("id"))
+        return useCasePerson.getPerson(serverRequest.pathVariable("id"))
                 .map(Handler::PersonToPersonResponse)
-                .flatMap(Respuestac -> ServerResponse
+                .flatMap(response -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(Respuestac));
+                        .bodyValue(response));
+
 
     }
 
     public Mono<ServerResponse> getPersonById(ServerRequest serverRequest) {
         // usecase.logic();
 
-        return useCaseperson.getPersonById(serverRequest.pathVariable("id"))
+        return useCasePerson.getPersonById(serverRequest.pathVariable("id"))
                 .map(Handler::PersonToPersonResponse)
-                .flatMap(Respuestac -> ServerResponse
+                .flatMap(response -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(Respuestac));
+                        .bodyValue(response));
 
     }
 
@@ -50,19 +51,19 @@ public class Handler {
         return ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(useCaseperson.getPeople()
+                        .body(useCasePerson.getPeople()
                                             .map(Handler::PersonToPersonResponse),
                                 PersonResponse.class
                 );
 
     }
 
-     private static PersonResponse PersonToPersonResponse(Person humanito) {
+     private static PersonResponse PersonToPersonResponse(Person personModel) {
         return PersonResponse
                 .builder()
-                .id(humanito.getId())
-                .nombre(humanito.getNombre())
-                .documento(humanito.getDocumento())
+                .id(personModel.getId())
+                .nombre(personModel.getNombre())
+                .documento(personModel.getDocumento())
                 .build();
     }
 
@@ -70,24 +71,28 @@ public class Handler {
     public Mono<ServerResponse> getUserById(ServerRequest serverRequest) {
         // usecase.logic();
 
-        return useCaseperson.getUserById(serverRequest.pathVariable("id"))
+        return useCasePerson.getUserById(serverRequest.pathVariable("id"))
                 .map(Handler::UserToUserResponse)
-                .flatMap(Respuestac -> ServerResponse
+                .flatMap(response -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(Respuestac));
+                        .bodyValue(response))
+                .onErrorResume(errorResponse -> Mono.just("Error " + errorResponse.getMessage())
+                        .flatMap(errorMessage -> ServerResponse.ok()
+                                .contentType(MediaType.TEXT_PLAIN)
+                                .bodyValue(errorMessage)));
 
     }
 
     public Mono<ServerResponse> getUsersByName(ServerRequest serverRequest) {
         // usecase.logic();
 
-        String searchUserName = String.valueOf(serverRequest.pathVariable("nombre"));
+        String searchUserName = String.valueOf(serverRequest.pathVariable("name"));
         return ServerResponse
                             .ok()
                             .contentType(MediaType.APPLICATION_JSON)
                             .body(
-                                    useCaseperson.getUsersByName(searchUserName)
+                                    useCasePerson.getUsersByName(searchUserName)
                                             .map(Handler::UserToUserResponse),
                                     UserResponse.class
                             );
@@ -104,7 +109,7 @@ public class Handler {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(useCaseperson.getUsers()
+                .body(useCasePerson.getUsers()
                                 .map(Handler::UserToUserResponse),
                         UserResponse.class
                 );
@@ -114,12 +119,16 @@ public class Handler {
 
     public Mono<ServerResponse> createUser(UserIdRequest serverRequest) {
         // usecase.logic();
-        return  useCaseperson.createUser(serverRequest.getRequestId())
+        return  useCasePerson.createUser(serverRequest.getRequestId())
                 .map(Handler::UserToUserResponse)
-                .flatMap(respuestaCreado -> ServerResponse
+                .flatMap(userResponseCreated -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(respuestaCreado));
+                .bodyValue(userResponseCreated))
+                .onErrorResume(errorResponse -> Mono.just("Error " + errorResponse.getMessage())
+                        .flatMap(errorMessage -> ServerResponse.ok()
+                                .contentType(MediaType.TEXT_PLAIN)
+                                .bodyValue(errorMessage)));
     }
 
     private static UserResponse UserToUserResponse(User localUser) {

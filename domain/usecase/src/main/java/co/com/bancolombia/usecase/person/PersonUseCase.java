@@ -41,13 +41,18 @@ public class PersonUseCase {
     public Mono<User> getUserById(String id) {
 
         return redisCacheGateway.getUserById(id)
-                        .switchIfEmpty(Mono.defer(() ->
-                                repositoryPostgresGateway.getUserById(id)
-                                        .flatMap(usuario ->
-                                                redisCacheGateway.saveUser(usuario).onErrorReturn(usuario))
+                        .switchIfEmpty(
+                                Mono.defer(
+                                        () -> repositoryPostgresGateway.getUserById(id)
+                                                .switchIfEmpty(
+                                                        Mono.defer(
+                                                                () -> Mono.error(new DataNotFoundException("User not found"))
+                                                        )
+                                                )
+                                                .flatMap(usuario ->
+                                                    redisCacheGateway.saveUser(usuario).onErrorReturn(usuario))
 
                         ));
-                //.switchIfEmpty(Mono.error(new DataNotFoundException("Holi")));
     }
 
     public Flux<User> getUsers() {
@@ -71,7 +76,6 @@ public class PersonUseCase {
                     .flatMap(repositoryPostgresGateway::saveUser)
                     .flatMap(usuario ->
                             redisCacheGateway.saveUser(usuario).onErrorReturn(usuario))
-                    .onErrorResume(error -> Mono.empty())
                     ;
 
     }

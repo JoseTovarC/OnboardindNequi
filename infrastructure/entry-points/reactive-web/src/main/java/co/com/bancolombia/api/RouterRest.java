@@ -19,7 +19,7 @@ public class RouterRest {
                 .and(route(GET("/api/personitas"), handler::getPeople))
                 //Seccion Usuarios
                 .and(route(GET("/api/usuario/{id}"), handler::getUserById))
-                .and(route(GET("/api/usuarios/{nombre}"), handler::getUsersByName))
+                .and(route(GET("/api/usuarios/{name}"), handler::getUsersByName))
                 .and(route(GET("/api/usuarios"), handler::getUsers))
                 .and(route(POST("/api/usuarios"),
                         request -> request
